@@ -28,6 +28,8 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis(TEXT("LookRightRate"), this, &AShooterCharacter::LookRightRate);
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction(TEXT("Speed"), EInputEvent::IE_Pressed, this, &AShooterCharacter::IncreaseMovementSpeed);
+	PlayerInputComponent->BindAction(TEXT("Speed"), EInputEvent::IE_Released, this, &AShooterCharacter::DecreaseMovementSpeed);
 }
 
 // Called when the game starts or when spawned
@@ -39,12 +41,12 @@ void AShooterCharacter::BeginPlay()
 
 void AShooterCharacter::MoveForward(float AxisValue) 
 {
-	AddMovementInput(GetActorForwardVector() * AxisValue);
+	AddMovementInput(GetActorForwardVector(), AxisValue / (SpeedButtonPressed? 4 : 1.72));
 }
 
 void AShooterCharacter::MoveRight(float AxisValue) 
 {
-	AddMovementInput(GetActorRightVector() * AxisValue);
+	AddMovementInput(GetActorRightVector(), AxisValue / (SpeedButtonPressed? 4 : 1.72));
 }
 
 void AShooterCharacter::LookUp(float AxisValue) 
@@ -65,4 +67,14 @@ void AShooterCharacter::LookUpRate(float AxisValue)
 void AShooterCharacter::LookRightRate(float AxisValue) 
 {
 	AddControllerYawInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
+}
+
+void AShooterCharacter::IncreaseMovementSpeed() 
+{
+	SpeedButtonPressed = true;
+}
+
+void AShooterCharacter::DecreaseMovementSpeed() 
+{
+	SpeedButtonPressed = false;
 }

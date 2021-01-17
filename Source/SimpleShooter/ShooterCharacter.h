@@ -32,7 +32,11 @@ private:
 	void LookRight(float AxisValue);
 	void LookUpRate(float AxisValue);
 	void LookRightRate(float AxisValue);
+	void IncreaseMovementSpeed();
+	void DecreaseMovementSpeed();
 
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 70;
+
+	bool SpeedButtonPressed = false;
 };
