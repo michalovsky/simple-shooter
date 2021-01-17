@@ -29,8 +29,8 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis(TEXT("LookRightRate"), this, &AShooterCharacter::LookRightRate);
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction(TEXT("Speed"), EInputEvent::IE_Pressed, this, &AShooterCharacter::IncreaseMovementSpeed);
-	PlayerInputComponent->BindAction(TEXT("Speed"), EInputEvent::IE_Released, this, &AShooterCharacter::DecreaseMovementSpeed);
+	PlayerInputComponent->BindAction(TEXT("Walk"), EInputEvent::IE_Pressed, this, &AShooterCharacter::DecreaseMovementSpeed);
+	PlayerInputComponent->BindAction(TEXT("Walk"), EInputEvent::IE_Released, this, &AShooterCharacter::IncreaseMovementSpeed);
 	PlayerInputComponent->BindAction(TEXT("Shoot"), EInputEvent::IE_Released, this, &AShooterCharacter::ShootGun);
 }
 
@@ -65,12 +65,12 @@ void AShooterCharacter::BeginPlay()
 
 void AShooterCharacter::MoveForward(float AxisValue) 
 {
-	AddMovementInput(GetActorForwardVector(), AxisValue / (SpeedButtonPressed? 4 : 1.72));
+	AddMovementInput(GetActorForwardVector(), AxisValue / (WalkButtonPressed? 4.f : 1.f));
 }
 
 void AShooterCharacter::MoveRight(float AxisValue) 
 {
-	AddMovementInput(GetActorRightVector(), AxisValue / (SpeedButtonPressed? 4 : 1.72));
+	AddMovementInput(GetActorRightVector(), AxisValue / (WalkButtonPressed? 4.f : 1.f));
 }
 
 void AShooterCharacter::LookUp(float AxisValue) 
@@ -95,12 +95,12 @@ void AShooterCharacter::LookRightRate(float AxisValue)
 
 void AShooterCharacter::IncreaseMovementSpeed() 
 {
-	SpeedButtonPressed = true;
+	WalkButtonPressed = false;
 }
 
 void AShooterCharacter::DecreaseMovementSpeed() 
 {
-	SpeedButtonPressed = false;
+	WalkButtonPressed = true;
 }
 
 void AShooterCharacter::ShootGun() 

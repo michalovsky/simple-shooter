@@ -47,7 +47,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 70;
 
-	bool SpeedButtonPressed = false;
+	bool WalkButtonPressed = false;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AGun> GunClass;
