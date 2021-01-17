@@ -1,4 +1,5 @@
 #include "ShooterCharacter.h"
+#include "Gun.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter()
@@ -30,6 +31,7 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Speed"), EInputEvent::IE_Pressed, this, &AShooterCharacter::IncreaseMovementSpeed);
 	PlayerInputComponent->BindAction(TEXT("Speed"), EInputEvent::IE_Released, this, &AShooterCharacter::DecreaseMovementSpeed);
+	PlayerInputComponent->BindAction(TEXT("Shoot"), EInputEvent::IE_Released, this, &AShooterCharacter::ShootGun);
 }
 
 // Called when the game starts or when spawned
@@ -37,6 +39,10 @@ void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	Gun = GetWorld()->SpawnActor<AGun>(GunClass);
+	GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
+	Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+	Gun->SetOwner(this);
 }
 
 void AShooterCharacter::MoveForward(float AxisValue) 
@@ -77,4 +83,9 @@ void AShooterCharacter::IncreaseMovementSpeed()
 void AShooterCharacter::DecreaseMovementSpeed() 
 {
 	SpeedButtonPressed = false;
+}
+
+void AShooterCharacter::ShootGun() 
+{
+	Gun->PullTrigger();
 }
