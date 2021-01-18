@@ -49,7 +49,10 @@ void AGun::PullTrigger()
 	// TODO: LineTrace
 
 	FHitResult Hit;
-	bool Succeed = GetWorld()->LineTraceSingleByChannel(Hit, Location, End, ECollisionChannel::ECC_GameTraceChannel1);
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	Params.AddIgnoredActor(GetOwner());
+	bool Succeed = GetWorld()->LineTraceSingleByChannel(Hit, Location, End, ECollisionChannel::ECC_GameTraceChannel1, Params);
 
 	if (Succeed)
 	{
