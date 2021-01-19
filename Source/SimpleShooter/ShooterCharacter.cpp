@@ -46,12 +46,12 @@ float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent cons
 
 	if (isDead())
 	{
-		DetachFromControllerPendingDestroy();
-		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		if (ASimpleShooterGameModeBase* GameMode = GetWorld()->GetAuthGameMode<ASimpleShooterGameModeBase>())
 		{
 			GameMode->PawnKilled(this);
 		}
+		DetachFromControllerPendingDestroy();
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 
 	return DamageToApply;
@@ -60,6 +60,11 @@ float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent cons
 bool AShooterCharacter::isDead() const
 {
 	return Health < 0.01f;
+}
+
+float AShooterCharacter::GetHealth() const
+{
+	return Health / MaxHealth;
 }
 
 // Called when the game starts or when spawned
