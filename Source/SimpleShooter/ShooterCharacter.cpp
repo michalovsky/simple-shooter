@@ -39,13 +39,17 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
 					 class AController* EventInstigator, AActor* DamageCauser) 
 {
+	if (isDead())
+	{
+		return 0.f;
+	}
+
 	float DamageToApply = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	DamageToApply = FMath::Min(Health, DamageToApply);
 	Health -= DamageToApply;
-	UE_LOG(LogTemp, Warning, TEXT("Current health: %f"), Health);
 
 	if (isDead())
 	{
+		UE_LOG(LogTemp, Warning, TEXT("DEAD"));
 		if (ASimpleShooterGameModeBase* GameMode = GetWorld()->GetAuthGameMode<ASimpleShooterGameModeBase>())
 		{
 			GameMode->PawnKilled(this);
@@ -59,7 +63,7 @@ float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent cons
 
 bool AShooterCharacter::isDead() const
 {
-	return Health < 0.01f;
+	return Health <= 0.0f;
 }
 
 float AShooterCharacter::GetHealth() const
